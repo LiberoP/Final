@@ -50,6 +50,6 @@ if (BUILD_TESTING)
   # aggiungi l'eseguibile final.t
   add_executable(final.t final.test.t.cpp)
   # aggiungi l'eseguibile progetto.t alla lista dei test
-  add_test(NAME progetto.t COMMAND progetto.t)
+  add_test(NAME final.t COMMAND final.t)
 
 endif()
