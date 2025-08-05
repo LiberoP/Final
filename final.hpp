@@ -9,8 +9,8 @@ namespace fn {
 
 struct Point
 {
-  int x;
-  int y;
+  double x;
+  double y;
 };
 
 struct Result
@@ -32,6 +32,7 @@ struct Pars
 class Simulation
 {
   std::vector<Point> points_;
+
   Pars pars_;
 
  public:
@@ -39,11 +40,11 @@ class Simulation
 
   void addPars(const Pars& pars);
 
-  const std::vector<Point>& points() const; // creo vettore di dim N+1
-
   void addPoint(Point const&);
 
-  void addPoint(double x, double y); // perche non ci va il const?
+  void addPoint(double x, double y);
+
+  const std::vector<Point>& points() const;
 
   void evolve(Pars const&, Point&);
 
@@ -57,4 +58,5 @@ Result final(Simulation const&);
 Result nstep(Simulation const&);
 
 } // namespace fn
+
 #endif

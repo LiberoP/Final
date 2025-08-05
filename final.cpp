@@ -13,23 +13,22 @@ size_t Simulation::size() const
 void Simulation::addPars(const Pars& pars)
 {
   pars_ = pars;
-  points_.resize(pars_.N
-                 + 1); // verificare che corrisponde a utente aggiunge parametri
+  points_.resize(pars_.N + 1); 
 }
 
-const std::vector<Point>& Simulation::points() const
+void Simulation::addPoint(Point const& p0)
 {
-  return points_;
-}
-
-void Simulation::addPoint(Point const& p)
-{
-  points_.push_back(p);
+  points_[0] = p0;
 }
 
 void Simulation::addPoint(double x, double y)
 {
   addPoint(Point{x, y});
+}
+
+const std::vector<Point>& Simulation::points() const
+{
+  return points_;
 }
 
 // DA QUI riempire un vettore di N elementi con il point i calcolato in ogni
