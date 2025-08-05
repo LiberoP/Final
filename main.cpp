@@ -5,16 +5,15 @@
 #include <iostream>
 #include <random> // serve?
 
+#include "final.hpp"
 #include "fstream"
-#include "final.hpp" 
 
-
-int main() {
+int main()
+{
   try {
     // ...
-    
 
-  } catch (std::exception const &e) {
+  } catch (std::exception const& e) {
     std::cerr << "Caught exception: '" << e.what() << "'\n";
     return EXIT_FAILURE;
   } catch (...) {
