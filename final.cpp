@@ -12,10 +12,12 @@ size_t Simulation::size() const
 
 void Simulation::addPars(const Pars& pars)
 {
-  Pars pars_ = pars; // verificare che corrisponde a utente aggiunge parametri
+  pars_ = pars;
+  points_.resize(pars_.N
+                 + 1); // verificare che corrisponde a utente aggiunge parametri
 }
 
-const std::vector<Point>& Simulation::points(pars.N + 1) const
+const std::vector<Point>& Simulation::points() const
 {
   return points_;
 }

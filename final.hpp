@@ -32,13 +32,14 @@ struct Pars
 class Simulation
 {
   std::vector<Point> points_;
+  Pars pars_;
 
  public:
   size_t size() const;
 
   void addPars(const Pars& pars);
 
-  const std::vector<Point>& points(pars.N + 1) const; // creo vettore di dim N+1
+  const std::vector<Point>& points() const; // creo vettore di dim N+1
 
   void addPoint(Point const&);
 
