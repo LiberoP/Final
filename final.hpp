@@ -15,7 +15,8 @@ struct Point
 
 struct Result
 {
-  Point p;
+  double x;
+  double y;
   double H;
 };
 
@@ -27,6 +28,7 @@ struct Pars
   double D;
   double N;
   double delta_t;
+  double nstep;
 };
 
 class Simulation
@@ -46,16 +48,16 @@ class Simulation
 
   const std::vector<Point>& points() const;
 
-  void evolve(Pars const&, Point&);
+  void evolve(Pars const&, Point&); 
 
   Result final() const;
 
   Result nstep() const;
 };
 
-Result final(Simulation const&);
+Result final(Result const&);
 
-Result nstep(Simulation const&);
+Result nstep(Result const&);
 
 } // namespace fn
 
