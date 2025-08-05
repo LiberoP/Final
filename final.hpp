@@ -36,11 +36,13 @@ class Simulation
  public:
   size_t size() const;
 
-  const std::vector<Point>& points() const;
+  void addPars(const Pars& pars);
 
-  void addPars(Pars const&);
+  const std::vector<Point>& points(pars.N + 1) const; // creo vettore di dim N+1
 
   void addPoint(Point const&);
+
+  void addPoint(double x, double y); // perche non ci va il const?
 
   void evolve(Pars const&, Point&);
 
