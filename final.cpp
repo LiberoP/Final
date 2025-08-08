@@ -7,7 +7,7 @@
 #include <stdexcept> // serve?
 
 namespace fn {
-size_t Simulation::size() const
+int Simulation::size() const
 {
   return points_.size();
 }
@@ -16,28 +16,27 @@ void Simulation::addPars(const Pars& pars)
 {
   pars_ = pars;
 
-  if (pars_.A <= 0 | pars_.B <= 0 | pars_.C <= 0 | pars_.D <= 0 | pars_.N < 1
-      | pars_.delta_t <= 0) {
+  if ((pars_.A <= 0) | (pars_.B <= 0) | (pars_.C <= 0) | (pars_.D <= 0)
+      | (pars_.N < 1) | (pars_.delta_t <= 0)) {
     throw std::runtime_error{
         "Non-positive starting equation / steps parameters"};
   }
 
-  else if (pars_.nstep<1 | pars_.nstep> pars_.N) {
+  else if ((pars_.nstep < 1) | (pars_.nstep > pars_.N)) {
     throw std::runtime_error{"Too low / high nth-step"};
   }
 
   points_.resize(pars_.N + 1);
 }
 
-auto const s = size();
-
 void Simulation::addPoint(Point const& p0)
 {
+  auto const s = size();
   if (s < 1) {
     throw std::runtime_error{"Null starting point"};
   }
 
-  else if (p0.x <= 0 | p0.y <= 0) {
+  else if ((p0.x <= 0) | (p0.y <= 0)) {
     throw std::runtime_error{"Negative starting point"};
   }
 
@@ -56,6 +55,7 @@ const std::vector<Point>& Simulation::points() const
 
 void Simulation::evolve(Pars const&, Point&)
 {
+  auto const s = size();
   for (int i = 1; i < s; ++i) {
     points_[i] = {points_[i - 1].x
                       + pars_.A * (1 - points_[i - 1].y) * points_[i - 1].x
