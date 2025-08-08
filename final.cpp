@@ -1,9 +1,10 @@
 //  qui DEFINISCO gli oggetti già dichiarati
 #include "final.hpp"
 
+#include <algorithm> // serve?
 #include <cmath>
 #include <numeric>
-#include <stdexcept>
+#include <stdexcept> // serve?
 
 namespace fn {
 size_t Simulation::size() const
@@ -14,24 +15,33 @@ size_t Simulation::size() const
 void Simulation::addPars(const Pars& pars)
 {
   pars_ = pars;
-  if ()
-  else if (pars_.A <= 0 | pars_.B <= 0 | pars_.C <= 0 | pars_.D <= 0) {
-    throw std::runtime_error{"Non-positive parameters"};
-  } else if ()
 
-    points_.resize(pars_.N + 1);
+  if (pars_.A <= 0 | pars_.B <= 0 | pars_.C <= 0 | pars_.D <= 0 | pars_.N < 1
+      | pars_.delta_t <= 0) {
+    throw std::runtime_error{
+        "Non-positive starting equation / steps parameters"};
+  }
+
+  else if (pars_.nstep<1 | pars_.nstep> pars_.N) {
+    throw std::runtime_error{"Too low / high nth-step"};
+  }
+
+  points_.resize(pars_.N + 1);
 }
+
+auto const s = size();
 
 void Simulation::addPoint(Point const& p0)
 {
-  auto const s = size();
   if (s < 1) {
     throw std::runtime_error{"Null starting point"};
   }
 
-  if () // completare!
+  else if (p0.x <= 0 | p0.y <= 0) {
+    throw std::runtime_error{"Negative starting point"};
+  }
 
-    points_[0] = {p0.x * pars_.C / pars_.D, p0.y * pars_.B / pars_.A};
+  points_[0] = {p0.x * pars_.C / pars_.D, p0.y * pars_.B / pars_.A};
 }
 
 void Simulation::addPoint(double x0, double y0)
@@ -86,5 +96,3 @@ Result nstep(Result const& nst)
 }
 
 } // namespace fn
-
-// namespace fn

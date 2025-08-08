@@ -26,9 +26,9 @@ struct Pars
   double B;
   double C;
   double D;
-  double N;
+  int N;
   double delta_t;
-  double nstep;
+  int nstep;
 };
 
 class Simulation
@@ -48,7 +48,7 @@ class Simulation
 
   const std::vector<Point>& points() const;
 
-  void evolve(Pars const&, Point&); 
+  void evolve(Pars const&, Point&);
 
   Result final() const;
 
