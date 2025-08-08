@@ -7,7 +7,7 @@
 #include <stdexcept> // serve?
 
 namespace fn {
-int Simulation::size() const
+size_t Simulation::size() const
 {
   return points_.size();
 }
@@ -56,7 +56,7 @@ const std::vector<Point>& Simulation::points() const
 void Simulation::evolve(Pars const&, Point&)
 {
   auto const s = size();
-  for (int i = 1; i < s; ++i) {
+  for (size_t i = 1; i < s; ++i) {
     points_[i] = {points_[i - 1].x
                       + pars_.A * (1 - points_[i - 1].y) * points_[i - 1].x
                             * pars_.delta_t,
@@ -77,7 +77,7 @@ Result Simulation::final() const
 
 Result Simulation::nstep() const
 {
-  int n     = pars_.nstep;
+  auto n     = pars_.nstep;
   Point np  = {points_[n].x * pars_.D / pars_.C,
                points_[n].y * pars_.A / pars_.B};
   double nH = -pars_.D * log(points_[n].x) + pars_.C * points_[n].x

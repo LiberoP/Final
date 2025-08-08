@@ -4,6 +4,7 @@ project(finalpf VERSION 0.1.0)
 # abilita il supporto per i test, tra cui l'opzione BUILD_TESTING usata sotto
 include(CTest)
 
+
 # esporta il compilation database, utile per altri strumenti, a partire dall'editor
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -48,7 +49,9 @@ target_link_libraries(final PRIVATE sfml-graphics)
 if (BUILD_TESTING)
 
   # aggiungi l'eseguibile progetto.t
-  add_executable(final.test final.test.cpp)
+  add_executable(final.test final.test.cpp main.cpp)  # VERIFICARE CHE SIA final.cpp anziché main.cpp
+
+  
   # aggiungi l'eseguibile progetto.t alla lista dei test
   add_test(NAME final.test COMMAND final.test)
 

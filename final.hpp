@@ -26,9 +26,9 @@ struct Pars
   double B;
   double C;
   double D;
-  int N;
+  size_t N;
   double delta_t;
-  int nstep;
+  size_t nstep;
 };
 
 class Simulation

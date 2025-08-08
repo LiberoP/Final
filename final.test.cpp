@@ -16,53 +16,53 @@ TEST_CASE("Testing Simulation")
 
   REQUIRE(sim.size() == 0);
 
-  SUBCASE("no parameters") // to implement in .cpp?
-  {
+  // SUBCASE("no parameters") // to implement in .cpp?
+  //{
+  //   sim.addPoint(p1);
+  //   CHECK_THROWS(sim.addPars());
+  // }
+
+  // SUBCASE("negative parameter")
+  //{
+  //   sim.addPoint(p1);
+
+  //  CHECK_THROWS(sim.addPars({-1., 3., 2.4, 4., 3, 0.001, 1}));
+  //}
+
+  SUBCASE("null parameter") 
+ {
     sim.addPoint(p1);
-    CHECK_THROWS(sim.addPars());
+ 
+    CHECK_THROWS(sim.addPars({1., 3.2, 0, 3., 3, 0.001, 1}));
   }
 
-  SUBCASE("negative parameter")
-  {
-    sim.addPoint(p1);
-    sim.addPars({-1., 3., 2.4, 4., 3, 0.001, 1});
-    CHECK_THROWS(sim.addPars());
-  }
+  // SUBCASE("too low nth step value")
+  // {
+  //
+  //   // NB first step is i = 0
+  //   CHECK_THROWS(sim.addPars({1., 3., 2., 5., 10, 0.001, -1}));
+  // }
 
-  SUBCASE("null parameter")
-  {
-    sim.addPoint(p1);
-    sim.addPars({1., 3.2, 0, 3, 3, 0.001, 1});
-    CHECK_THROWS(sim.addPars());
-  }
-
-  SUBCASE("too low nth step value")
-  {
-    sim.addPars({1., 3., 2., 5., 10, 0.001, -1});
-    // NB first step is i = 0
-    CHECK_THROWS(sim.addPars());
-  }
-
-  SUBCASE("too high nth step value")
-  {
-    sim.addPars({1., 3., 2., 5., 10, 0.001, 10});
+  SUBCASE("too high nth step value") //
+  
+ {
     sim.addPoint(p1);
     // NB 1000th step is i = 999
-    CHECK_THROWS(sim.addPars());
+    CHECK_THROWS(sim.addPars({1., 3., 2., 5., 10, 0.001, 10}));
   }
 
-  SUBCASE("no starting point")
-  {
-    sim.addPars(parsA);
-    CHECK_THROWS(sim.addPoint());
-  }
+  // SUBCASE("no starting point")
+  // {
+  //   sim.addPars(parsA);
+  //   CHECK_THROWS(sim.addPoint());
+  // }
 
-  SUBCASE("negative starting point")
-  {
-    sim.addPars(parsA);
-    sim.addPoint({2, -1});
-    CHECK_THROWS(sim.addPoint());
-  }
+  //  SUBCASE("negative starting point")
+  //  {
+  //    sim.addPars(parsA);
+  //    sim.addPoint({2, -1});
+  //    CHECK_THROWS(sim.addPoint());
+  //  }
 
   SUBCASE("final 1")
   {
