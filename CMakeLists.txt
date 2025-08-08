@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(progettopf VERSION 0.1.0)
+project(finalpf VERSION 0.1.0)
 
 # abilita il supporto per i test, tra cui l'opzione BUILD_TESTING usata sotto
 include(CTest)
@@ -39,7 +39,7 @@ find_package(SFML 2.6 COMPONENTS graphics REQUIRED)
 # sostituire "progetto" con il nome del proprio eseguibile e i file sorgente con i propri (con nomi sensati!)
 add_executable(final main.cpp final.cpp final.hpp)
 # nel caso si usi SFML. analogamente per eventuali altre librerie
-target_link_libraries(progetto PRIVATE sfml-graphics)
+target_link_libraries(final PRIVATE sfml-graphics)
 
 # aggiungere eventuali altri eseguibili
 
