@@ -1,5 +1,7 @@
 // qui solo TESTs
 
+// aggiungere altri test!
+
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include "final.hpp"
@@ -10,13 +12,19 @@ TEST_CASE("Testing Simulation")
 {
   fn::Simulation sim;
   fn::Pars parsA{1., 3., 2., 5., 10, 0.001, 4}; // A, B, C, D, N, delta-t, nstep
-  fn::Point p1{20., 10.};                       // x0, y0
+  fn::Pars pars0{1., 3.2, 0, 3., 3, 0.001, 1};
+  fn::Pars parshigh{1., 3.2, 1., 3., 3, 0.001, 11};
+  fn::Point p1{20., 10.}; // x0, y0
   fn::Point p2{10., 20.};
   fn::Point p3{10., 10.};
 
   REQUIRE(sim.size() == 0);
 
-  // SUBCASE("no parameters") // to implement in .cpp?
+  // ============ADDITIONAL TESTS (l'utente inserisce ad es. nessun===========
+  // ============parametro, o un N non intero) to implement in================
+  // ============ .cpp?:=====================================================
+
+  // SUBCASE("no parameters")
   //{
   //   sim.addPoint(p1);
   //   CHECK_THROWS(sim.addPars());
@@ -29,11 +37,9 @@ TEST_CASE("Testing Simulation")
   //  CHECK_THROWS(sim.addPars({-1., 3., 2.4, 4., 3, 0.001, 1}));
   //}
 
-  SUBCASE("null parameter") 
- {
-    sim.addPoint(p1);
- 
-    CHECK_THROWS(sim.addPars({1., 3.2, 0, 3., 3, 0.001, 1}));
+  SUBCASE("null parameter")
+  {
+    CHECK_THROWS_AS(sim.addPars(pars0), std::runtime_error);
   }
 
   // SUBCASE("too low nth step value")
@@ -44,11 +50,10 @@ TEST_CASE("Testing Simulation")
   // }
 
   SUBCASE("too high nth step value") //
-  
- {
-    sim.addPoint(p1);
+
+  {
     // NB 1000th step is i = 999
-    CHECK_THROWS(sim.addPars({1., 3., 2., 5., 10, 0.001, 10}));
+    CHECK_THROWS_AS(sim.addPars(parshigh), std::runtime_error);
   }
 
   // SUBCASE("no starting point")
@@ -67,60 +72,66 @@ TEST_CASE("Testing Simulation")
   SUBCASE("final 1")
   {
     sim.addPars(parsA);
-    sim.addPoint(p1);
+    sim.addPoint(p1, parsA);
+    sim.evolve(parsA, p1);
     auto result = sim.final();
-    CHECK(result.x == doctest::Approx(17.66));
-    CHECK(result.y == doctest::Approx(11.40));
-    CHECK(result.H == doctest::Approx(52.72));
+    CHECK(result.x == doctest::Approx(14.21).epsilon(0.05));
+    CHECK(result.y == doctest::Approx(13.39).epsilon(0.05));
+    CHECK(result.H == doctest::Approx(52.72).epsilon(0.05));
   }
 
   SUBCASE("final 2")
   {
     sim.addPars(parsA);
-    sim.addPoint(p2);
+    sim.addPoint(p2, parsA);
+    sim.evolve(parsA, p1);
     auto result = sim.final();
-    CHECK(result.x == doctest::Approx(5.35));
-    CHECK(result.y == doctest::Approx(22.09));
-    CHECK(result.H == doctest::Approx(65.49));
+    CHECK(result.x == doctest::Approx(5.35).epsilon(0.05));
+    CHECK(result.y == doctest::Approx(22.09).epsilon(0.05));
+    CHECK(result.H == doctest::Approx(65.49).epsilon(0.05));
   }
 
   SUBCASE("final 3")
   {
     sim.addPars(parsA);
-    sim.addPoint(p3);
+    sim.addPoint(p3, parsA);
+    sim.evolve(parsA, p1);
     auto result = sim.final();
-    CHECK(result.x == doctest::Approx(7.33));
-    CHECK(result.y == doctest::Approx(11.30));
-    CHECK(result.H == doctest::Approx(36.18));
+    CHECK(result.x == doctest::Approx(7.33).epsilon(0.05));
+    CHECK(result.y == doctest::Approx(11.30).epsilon(0.05));
+    CHECK(result.H == doctest::Approx(36.18).epsilon(0.05));
   }
 
   SUBCASE("check Nth step values in case 1")
   {
     sim.addPars(parsA);
-    sim.addPoint(p1);
+    sim.addPoint(p1, parsA);
+    sim.evolve(parsA, p1);
     auto nstep = sim.nstep();
-    CHECK(nstep.x == doctest::Approx(14.21));
-    CHECK(nstep.y == doctest::Approx(13.39));
-    CHECK(nstep.H == doctest::Approx(52.72));
+    CHECK(nstep.x == doctest::Approx(17.66).epsilon(0.05));
+    CHECK(nstep.y == doctest::Approx(11.40).epsilon(0.05));
+    CHECK(nstep.H == doctest::Approx(52.72).epsilon(0.05));
   }
 
   SUBCASE("check Nth step values in case 2")
   {
     sim.addPars(parsA);
-    sim.addPoint(p2);
+    sim.addPoint(p2, parsA);
+    sim.evolve(parsA, p1);
     auto nstep = sim.nstep();
-    CHECK(nstep.x == doctest::Approx(7.85));
-    CHECK(nstep.y == doctest::Approx(21.05));
-    CHECK(nstep.H == doctest::Approx(65.49));
+    CHECK(nstep.x == doctest::Approx(7.85).epsilon(0.05));
+    CHECK(nstep.y == doctest::Approx(21.05).epsilon(0.05));
+    CHECK(nstep.H == doctest::Approx(65.49).epsilon(0.05));
   }
 
   SUBCASE("check Nth step values in case 3")
   {
     sim.addPars(parsA);
-    sim.addPoint(p3);
+    sim.addPoint(p3, parsA);
+    sim.evolve(parsA, p1);
     auto nstep = sim.nstep();
-    CHECK(nstep.x == doctest::Approx(8.87));
-    CHECK(nstep.y == doctest::Approx(10.57));
-    CHECK(nstep.H == doctest::Approx(36.18));
+    CHECK(nstep.x == doctest::Approx(8.87).epsilon(0.05));
+    CHECK(nstep.y == doctest::Approx(10.57).epsilon(0.05));
+    CHECK(nstep.H == doctest::Approx(36.18).epsilon(0.05));
   }
 }

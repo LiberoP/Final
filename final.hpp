@@ -9,8 +9,9 @@ namespace fn {
 
 struct Point
 {
-  double x;
-  double y;
+  double xrel;
+  double yrel;
+  double H; // da implementare in evolve() e nel risultato finale!!!
 };
 
 struct Result
@@ -18,7 +19,9 @@ struct Result
   double x;
   double y;
   double H;
-};
+}; // verificare che convenga per chiarezza, o se conviene un'unica classe
+   // "Point" (anche se concettualmente una ha le coordinate riscalate, l'altra
+   // no)?
 
 struct Pars
 {
@@ -28,7 +31,7 @@ struct Pars
   double D;
   size_t N;
   double delta_t;
-  size_t nstep;
+  size_t nstep; // eliminare!
 };
 
 class Simulation
@@ -42,17 +45,20 @@ class Simulation
 
   void addPars(const Pars& pars);
 
-  void addPoint(Point const&);
+  void addPoint(Point const&, Pars pars);
 
-  void addPoint(double x, double y);
+  // void addPoint(double x0, double y0); // eventualmente da implementare con
+  // relativi test?
 
-  const std::vector<Point>& points() const;
+  const std::vector<Point>& points() const; //
 
-  void evolve(Pars const&, Point&);
+  void evolve(Pars const& pars, Point&);
 
   Result final() const;
 
   Result nstep() const;
+
+  // opzionale: aggiungere stima errore per ciascun punto, visualizzazione grafica di x(t) e y(t)
 };
 
 Result final(Result const&);

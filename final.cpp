@@ -1,10 +1,12 @@
 //  qui DEFINISCO gli oggetti già dichiarati
 #include "final.hpp"
 
-#include <algorithm> // serve?
+// #include <algorithm>
 #include <cmath>
 #include <numeric>
-#include <stdexcept> // serve?
+#include <stdexcept>
+
+// verificare const-correctness!
 
 namespace fn {
 size_t Simulation::size() const
@@ -16,21 +18,22 @@ void Simulation::addPars(const Pars& pars)
 {
   pars_ = pars;
 
-  if ((pars_.A <= 0) | (pars_.B <= 0) | (pars_.C <= 0) | (pars_.D <= 0)
-      | (pars_.N < 1) | (pars_.delta_t <= 0)) {
+  if ((pars.A <= 0) | (pars.B <= 0) | (pars.C <= 0) | (pars.D <= 0)
+      | (pars.N < 1) | (pars.delta_t <= 0)) {
     throw std::runtime_error{
         "Non-positive starting equation / steps parameters"};
   }
 
-  else if ((pars_.nstep < 1) | (pars_.nstep > pars_.N)) {
+  else if ((pars.nstep < 1) | (pars.nstep > pars.N)) {
     throw std::runtime_error{"Too low / high nth-step"};
   }
 
-  points_.resize(pars_.N + 1);
+  points_.resize(pars.N + 1);
 }
 
-void Simulation::addPoint(Point const& p0)
+void Simulation::addPoint(Point const& p0, Pars pars)
 {
+  pars_        = pars;
   auto const s = size();
   if (s < 1) {
     throw std::runtime_error{"Null starting point"};
@@ -40,29 +43,31 @@ void Simulation::addPoint(Point const& p0)
     throw std::runtime_error{"Negative starting point"};
   }
 
-  points_[0] = {p0.x * pars_.C / pars_.D, p0.y * pars_.B / pars_.A};
+  points_[0] = {p0.x * pars.C / pars.D, p0.y * pars.B / pars.A};
 }
 
-void Simulation::addPoint(double x0, double y0)
-{
-  addPoint(Point{x0, y0});
-}
+// void Simulation::addPoint(double x0, double y0)
+//{
+//   pars_ = pars;
+//   addPoint(Point{x0, y0}, Pars(pars));
+// }
 
 const std::vector<Point>& Simulation::points() const
 {
   return points_;
 }
 
-void Simulation::evolve(Pars const&, Point&)
+void Simulation::evolve(Pars const& pars, Point&)
 {
+  pars_        = pars;
   auto const s = size();
   for (size_t i = 1; i < s; ++i) {
     points_[i] = {points_[i - 1].x
-                      + pars_.A * (1 - points_[i - 1].y) * points_[i - 1].x
-                            * pars_.delta_t,
+                      + pars.A * (1 - points_[i - 1].y) * points_[i - 1].x
+                            * pars.delta_t,
                   points_[i - 1].y
-                      + pars_.D * (points_[i - 1].x - 1) * points_[i - 1].y
-                            * pars_.delta_t};
+                      + pars.D * (points_[i - 1].x - 1) * points_[i - 1].y
+                            * pars.delta_t};
   }
 }
 
@@ -77,11 +82,11 @@ Result Simulation::final() const
 
 Result Simulation::nstep() const
 {
-  auto n     = pars_.nstep;
+  auto n    = pars_.nstep;
   Point np  = {points_[n].x * pars_.D / pars_.C,
                points_[n].y * pars_.A / pars_.B};
-  double nH = -pars_.D * log(points_[n].x) + pars_.C * points_[n].x
-            + pars_.B * points_[n].y - pars_.A * log(points_[n].y);
+  double nH = -pars_.D * log(np.x) + pars_.C * np.x + pars_.B * np.y
+            - pars_.A * log(np.y);
   return Result{fabs(np.x), fabs(np.y), fabs(nH)};
 }
 
