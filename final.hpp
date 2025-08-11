@@ -7,11 +7,17 @@
 
 namespace fn {
 
-struct Point
+struct UserPoint
+{
+  double x;
+  double y;
+};
+
+struct InternalPoint
 {
   double xrel;
   double yrel;
-  double H; // da implementare in evolve() e nel risultato finale!!!
+  double H;
 };
 
 struct Result
@@ -19,9 +25,7 @@ struct Result
   double x;
   double y;
   double H;
-}; // verificare che convenga per chiarezza, o se conviene un'unica classe
-   // "Point" (anche se concettualmente una ha le coordinate riscalate, l'altra
-   // no)?
+};
 
 struct Pars
 {
@@ -31,12 +35,12 @@ struct Pars
   double D;
   size_t N;
   double delta_t;
-  size_t nstep; // eliminare!
+  // size_t nstep;
 };
 
 class Simulation
 {
-  std::vector<Point> points_;
+  std::vector<InternalPoint> points_;
 
   Pars pars_;
 
@@ -45,25 +49,28 @@ class Simulation
 
   void addPars(const Pars& pars);
 
-  void addPoint(Point const&, Pars pars);
+  void addUserPoint(UserPoint const&, Pars pars);
 
   // void addPoint(double x0, double y0); // eventualmente da implementare con
   // relativi test?
 
-  const std::vector<Point>& points() const; //
+  const std::vector<InternalPoint>& points() const;
 
-  void evolve(Pars const& pars, Point&);
+  void evolve(Pars const& pars);
 
-  Result final() const;
+  std::vector<Result> result_;
 
-  Result nstep() const;
+  std::vector<Result> result(Pars const& pars);
 
-  // opzionale: aggiungere stima errore per ciascun punto, visualizzazione grafica di x(t) e y(t)
+  // Result nstep() const;
+
+  // OPZIONALE: aggiungere stima errore per ciascun punto, visualizzazione
+  // grafica di x(t) e y(t)
 };
 
-Result final(Result const&);
+std::vector<Result> result(std::vector<Result> const& res);
 
-Result nstep(Result const&);
+// Result nstep(Result const&);
 
 } // namespace fn
 
