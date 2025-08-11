@@ -1,12 +1,9 @@
 //  qui DEFINISCO gli oggetti già dichiarati
 #include "final.hpp"
 
-// #include <algorithm>
 #include <cmath>
 #include <numeric>
 #include <stdexcept>
-
-// verificare const-correctness!
 
 namespace fn {
 size_t Simulation::size() const
@@ -25,10 +22,6 @@ void Simulation::addPars(const Pars& pars)
   else if ((pars.N < 1) | (pars.delta_t <= 0)) {
     throw std::runtime_error{"Invalid steps parameters"};
   }
-
-  // else if ((pars.nstep < 1) | (pars.nstep > pars.N)) {
-  //   throw std::runtime_error{"Too low / high nth-step"};
-  // }
 
   points_.resize(pars.N + 1);
 }
@@ -51,12 +44,6 @@ void Simulation::addUserPoint(UserPoint const& p0, Pars pars)
           - pars_.A * log(p0.y)}; // note: H of initial i=0 point is calculated
                                   // from the initial (user) coordinates
 }
-
-// void Simulation::addPoint(double x0, double y0)
-//{
-//   pars_ = pars;
-//   addPoint(Point{x0, y0}, Pars(pars));
-// }
 
 const std::vector<InternalPoint>& Simulation::points() const
 {
@@ -101,10 +88,5 @@ std::vector<Result> result(std::vector<Result> const& res)
 {
   return res;
 }
-
-// Result nstep(Result const& nst)
-//{
-//   return nst;
-// }
 
 } // namespace fn

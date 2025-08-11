@@ -35,7 +35,6 @@ struct Pars
   double D;
   size_t N;
   double delta_t;
-  // size_t nstep;
 };
 
 class Simulation
@@ -51,9 +50,6 @@ class Simulation
 
   void addUserPoint(UserPoint const&, Pars pars);
 
-  // void addPoint(double x0, double y0); // eventualmente da implementare con
-  // relativi test?
-
   const std::vector<InternalPoint>& points() const;
 
   void evolve(Pars const& pars);
@@ -62,15 +58,11 @@ class Simulation
 
   std::vector<Result> result(Pars const& pars);
 
-  // Result nstep() const;
-
   // OPZIONALE: aggiungere stima errore per ciascun punto, visualizzazione
   // grafica di x(t) e y(t)
 };
 
 std::vector<Result> result(std::vector<Result> const& res);
-
-// Result nstep(Result const&);
 
 } // namespace fn
 
