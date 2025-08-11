@@ -1,4 +1,0 @@
-final.test 0 0
-final.test.cpp 1 0
----
-final.test
