@@ -48,15 +48,13 @@ class Simulation
 
   void addPars(const Pars& pars);
 
-  void addUserPoint(UserPoint const&, Pars pars);
+  void addUserPoint(UserPoint const&, const Pars&);
 
   const std::vector<InternalPoint>& points() const;
 
-  void evolve(Pars const& pars);
+  void evolve();
 
-  std::vector<Result> result_;
-
-  std::vector<Result> result(Pars const& pars);
+  std::vector<Result> result() const;
 
   // OPZIONALE: aggiungere stima errore per ciascun punto, visualizzazione
   // grafica di x(t) e y(t)
