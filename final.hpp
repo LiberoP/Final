@@ -1,5 +1,3 @@
-// qui DICHIARO solamente gli oggetti
-
 #ifndef FN_FINAL_HPP
 #define FN_FINAL_HPP
 
@@ -40,7 +38,7 @@ struct Pars
 class Simulation
 {
   std::vector<InternalPoint> points_;
-
+  bool parameters_added_ = false;
   Pars pars_;
 
  public:
@@ -48,11 +46,13 @@ class Simulation
 
   void addPars(const Pars& pars);
 
-  void addUserPoint(UserPoint const&, const Pars&);
-
-  const std::vector<InternalPoint>& points() const;
+  void addUserPoint(UserPoint const&);
 
   void evolve();
+
+  const std::vector<InternalPoint>&
+  points() const; // note: not necessary, but one might want to know the
+                  // internal representation vector for analysis
 
   std::vector<Result> result() const;
 

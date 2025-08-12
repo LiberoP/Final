@@ -1,5 +1,3 @@
-// qui solo TESTs
-
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include "final.hpp"
@@ -10,51 +8,61 @@ TEST_CASE("Testing Simulation")
 {
   fn::Simulation sim;
   fn::Pars parsA{1., 3., 2., 5., 10, 0.001}; // A, B, C, D, N, delta-t
+
   fn::Pars pars0{1., 3.2, 0, 3., 3, 0.001};
+  fn::Pars pars00{1., 1., 1., 3., 3, 0};
+  fn::Pars parsneg{-1., 3., 2.4, 4., 3, 0.001};
+
   fn::UserPoint p1{20., 10.}; // x0, y0
   fn::UserPoint p2{10., 20.};
   fn::UserPoint p3{10., 10.};
 
   REQUIRE(sim.size() == 0);
 
-  // uncomment questi e aggiungere test su resizing vettore, delta_t < = 0, valore punto iniziale, altri parametri !
+  //  aggiungere test su  altri parametri !
 
-  // SUBCASE("no parameters")
-  //{
-  //   sim.addPoint(p1);
-  //   CHECK_THROWS(sim.addPars());
-  // }
+  SUBCASE("no parameters")
+  {
+    CHECK_THROWS(sim.addUserPoint(p1)); // should evolve() throw instead ?
+  }
 
-  // SUBCASE("negative parameter")
-  //{
-  //   sim.addPoint(p1);
-
-  //  CHECK_THROWS(sim.addPars({-1., 3., 2.4, 4., 3, 0.001, 1}));
-  //}
+  SUBCASE("negative parameter")
+  {
+    CHECK_THROWS(sim.addPars(parsneg));
+  }
 
   SUBCASE("null parameter")
   {
-    CHECK_THROWS_AS(sim.addPars(pars0), std::runtime_error);
+    CHECK_THROWS(sim.addPars(pars0));
   }
 
+  SUBCASE("null steps parameter")
+  {
+    CHECK_THROWS(sim.addPars(pars00));
+  }
 
-  // SUBCASE("no starting point")
-  // {
-  //   sim.addPars(parsA);
-  //   CHECK_THROWS(sim.addPoint());
-  // }
+  SUBCASE("no starting point")
+  {
+    sim.addPars(parsA);
+    CHECK_THROWS(sim.evolve());
+  }
 
-  //  SUBCASE("negative starting point")
-  //  {
-  //    sim.addPars(parsA);
-  //    sim.addPoint({2, -1});
-  //    CHECK_THROWS(sim.addPoint());
-  //  }
+  SUBCASE("negative starting point")
+  {
+    sim.addPars(parsA);
+    CHECK_THROWS(sim.addUserPoint({2., -1.}));
+  }
+
+  SUBCASE("null starting point")
+  {
+    sim.addPars(parsA);
+    CHECK_THROWS(sim.addUserPoint({0., 1.}));
+  }
 
   SUBCASE("final 1")
   {
     sim.addPars(parsA);
-    sim.addUserPoint(p1, parsA);
+    sim.addUserPoint(p1);
     sim.evolve();
     auto result = sim.result();
     CHECK(result[parsA.N].x == doctest::Approx(14.21).epsilon(0.05));
@@ -65,7 +73,7 @@ TEST_CASE("Testing Simulation")
   SUBCASE("final 2")
   {
     sim.addPars(parsA);
-    sim.addUserPoint(p2, parsA);
+    sim.addUserPoint(p2);
     sim.evolve();
     auto result = sim.result();
     CHECK(result[parsA.N].x == doctest::Approx(5.35).epsilon(0.05));
@@ -76,7 +84,7 @@ TEST_CASE("Testing Simulation")
   SUBCASE("final 3")
   {
     sim.addPars(parsA);
-    sim.addUserPoint(p3, parsA);
+    sim.addUserPoint(p3);
     sim.evolve();
     auto result = sim.result();
     CHECK(result[parsA.N].x == doctest::Approx(7.33).epsilon(0.05));
@@ -87,7 +95,7 @@ TEST_CASE("Testing Simulation")
   SUBCASE("check 4th step values in case 1")
   {
     sim.addPars(parsA);
-    sim.addUserPoint(p1, parsA);
+    sim.addUserPoint(p1);
     sim.evolve();
     auto result = sim.result();
     CHECK(result[4].x == doctest::Approx(17.66).epsilon(0.05));
@@ -98,7 +106,7 @@ TEST_CASE("Testing Simulation")
   SUBCASE("check 4th step values in case 2")
   {
     sim.addPars(parsA);
-    sim.addUserPoint(p2, parsA);
+    sim.addUserPoint(p2);
     sim.evolve();
     auto result = sim.result();
     CHECK(result[4].x == doctest::Approx(7.85).epsilon(0.05));
@@ -109,7 +117,7 @@ TEST_CASE("Testing Simulation")
   SUBCASE("check 4th step values in case 3")
   {
     sim.addPars(parsA);
-    sim.addUserPoint(p3, parsA);
+    sim.addUserPoint(p3);
     sim.evolve();
     auto result = sim.result();
     CHECK(result[4].x == doctest::Approx(8.87).epsilon(0.05));
