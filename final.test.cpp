@@ -9,7 +9,7 @@ TEST_CASE("Testing Simulation")
   fn::Simulation sim;
   fn::Pars parsA{1., 3., 2., 5., 10, 0.001}; // A, B, C, D, N, delta-t
   fn::Pars parsB{2.18, 3.14, 4.17, 6.73, 100, 0.0001};
-  fn::Pars parsC{1.2, 0.5, 0.1, 0.5, 100, 0.001}; // more realistic parameters
+  fn::Pars parsC{1.2, 0.5, 0.1, 0.5, 100, 0.001}; // note: more realistic parameters
 
   fn::Pars pars0{1., 3.2, 0, 3., 3, 0.001};
   fn::Pars pars00{1., 1., 1., 3., 3, 0};
@@ -24,8 +24,6 @@ TEST_CASE("Testing Simulation")
   fn::UserPoint p6{231., 227.};
 
   REQUIRE(sim.size() == 0);
-
-  //  aggiungere test su  altri parametri !
 
   SUBCASE("no parameters")
   {

@@ -11,10 +11,10 @@ int main()
   try {
     fn::Simulation sim;
 
-    std::ifstream infile{"../final/input.txt"};
+    std::ifstream infile{"./input.txt"};
 
     if (!infile) {
-      throw std::runtime_error{"Impossible to open file!"};
+      throw std::runtime_error{"Impossible to open input file"};
     }
 
     double A, B, C, D;
@@ -33,7 +33,7 @@ int main()
     std::ofstream outfile{"Results.txt"};
 
     if (!outfile) {
-      throw std::runtime_error{"Impossible to open file"};
+      throw std::runtime_error{"Impossible to open output file"};
     }
 
     outfile << std::left << std::setw(30) << "Time, t" << std::setw(30)

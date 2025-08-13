@@ -1,3 +1,6 @@
+// OPZIONALE: aggiungere stima errore per ciascun punto, visualizzazione
+// grafica di x(t) e y(t)
+
 #ifndef FN_FINAL_HPP
 #define FN_FINAL_HPP
 
@@ -51,13 +54,10 @@ class Simulation
   void evolve();
 
   const std::vector<InternalPoint>&
-  points() const; // note: not necessary, but one might want to know the
-                  // internal representation vector for analysis
+  points() const; // note: not strictly necessary, but one might want to know
+                  // the internal representation vector for later analysis
 
   std::vector<Result> result() const;
-
-  // OPZIONALE: aggiungere stima errore per ciascun punto, visualizzazione
-  // grafica di x(t) e y(t)
 };
 
 std::vector<Result> result(std::vector<Result> const& res);
