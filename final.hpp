@@ -1,6 +1,3 @@
-// OPZIONALE: aggiungere stima errore per ciascun punto, visualizzazione
-// grafica di x(t) e y(t)
-
 #ifndef FN_FINAL_HPP
 #define FN_FINAL_HPP
 
@@ -43,11 +40,12 @@ class Simulation
   std::vector<InternalPoint> points_;
   bool parameters_added_ = false;
   Pars pars_;
+  UserPoint p0_;
 
  public:
   size_t size() const;
 
-  void addPars(const Pars& pars);
+  void addPars(const Pars&);
 
   void addUserPoint(UserPoint const&);
 

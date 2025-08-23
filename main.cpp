@@ -1,5 +1,6 @@
 #include "final.hpp"
 
+#include <cmath>
 #include <cstdlib>
 #include <exception>
 #include <fstream>
@@ -11,22 +12,35 @@ int main()
   try {
     fn::Simulation sim;
 
-    std::ifstream infile{"./input.txt"};
+    std::ifstream infile{"./Input.txt"};
 
     if (!infile) {
       throw std::runtime_error{"Impossible to open input file"};
     }
 
     double A, B, C, D;
-    size_t N;
+
     double delta_t;
     double x0, y0;
 
-    while (infile >> A >> B >> C >> D >> N >> delta_t >> x0 >> y0) {
-      sim.addPars({A, B, C, D, N, delta_t});
-      sim.addUserPoint({x0, y0});
-      sim.evolve();
+    double input_N;
+
+    if ((!(infile >> A >> B >> C >> D >> input_N >> delta_t >> x0 >> y0))
+
+    ) {
+      throw std::runtime_error{"Invalid or incomplete data in Input.txt"};
     }
+
+    if (input_N != std::floor(input_N)) {
+      throw std::runtime_error{"N must be an integer"};
+    }
+
+    size_t N = static_cast<size_t>(input_N);
+
+    sim.addPars({A, B, C, D, N, delta_t});
+    sim.addUserPoint({x0, y0});
+    sim.evolve();
+
     fn::Pars pars = {A, B, C, D, N, delta_t};
     auto res      = sim.result();
 

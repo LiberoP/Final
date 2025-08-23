@@ -9,7 +9,9 @@ TEST_CASE("Testing Simulation")
   fn::Simulation sim;
   fn::Pars parsA{1., 3., 2., 5., 10, 0.001}; // A, B, C, D, N, delta-t
   fn::Pars parsB{2.18, 3.14, 4.17, 6.73, 100, 0.0001};
-  fn::Pars parsC{1.2, 0.5, 0.1, 0.5, 100, 0.001}; // note: more realistic parameters
+  fn::Pars parsC{1.2, 0.5, 0.1,
+                 0.5, 100, 0.001}; // note: more realistic parameters
+  fn::Pars parsD{1.3, 0.4, 0.1, 0.5, 100, 0.001};
 
   fn::Pars pars0{1., 3.2, 0, 3., 3, 0.001};
   fn::Pars pars00{1., 1., 1., 3., 3, 0};
@@ -27,7 +29,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("no parameters")
   {
-    CHECK_THROWS(sim.addUserPoint(p1)); // should evolve() throw instead ?
+    CHECK_THROWS(sim.addUserPoint(p1));
   }
 
   SUBCASE("negative parameter")
@@ -267,5 +269,73 @@ TEST_CASE("Testing Simulation")
               0.2)); // note: test would fail with stricter approximation
     CHECK(result[20].y == doctest::Approx(267.37).epsilon(0.05));
     CHECK(result[20].H == doctest::Approx(127.37).epsilon(0.05));
+  }
+
+  SUBCASE("final D4")
+  {
+    sim.addPars(parsD);
+    sim.addUserPoint(p4);
+    sim.evolve();
+    auto result = sim.result();
+    CHECK(result[parsD.N].x == doctest::Approx(19.64).epsilon(0.05));
+    CHECK(result[parsD.N].y == doctest::Approx(71.55).epsilon(0.05));
+    CHECK(result[parsD.N].H == doctest::Approx(23.54).epsilon(0.05));
+  }
+
+  SUBCASE("final D5")
+  {
+    sim.addPars(parsD);
+    sim.addUserPoint(p5);
+    sim.evolve();
+    auto result = sim.result();
+    CHECK(result[parsD.N].x == doctest::Approx(1.51E-4).epsilon(0.05));
+    CHECK(result[parsD.N].y == doctest::Approx(288.76).epsilon(0.05));
+    CHECK(result[parsD.N].H == doctest::Approx(112.54).epsilon(0.05));
+  }
+
+  SUBCASE("final D6")
+  {
+    sim.addPars(parsD);
+    sim.addUserPoint(p6);
+    sim.evolve();
+    auto result = sim.result();
+    CHECK(result[parsD.N].x == doctest::Approx(4.80E-3).epsilon(0.05));
+    CHECK(result[parsD.N].y == doctest::Approx(271.85).epsilon(0.05));
+    CHECK(result[parsD.N].H == doctest::Approx(104.12).epsilon(0.05));
+  }
+
+  SUBCASE("check 40th step values in case D4")
+  {
+    sim.addPars(parsD);
+    sim.addUserPoint(p4);
+    sim.evolve();
+    auto result = sim.result();
+    CHECK(result[40].x == doctest::Approx(87.40).epsilon(0.05));
+    CHECK(result[40].y == doctest::Approx(55.66).epsilon(0.05));
+    CHECK(result[40].H == doctest::Approx(23.55).epsilon(0.05));
+  }
+
+  SUBCASE("check 40th step values in case D5")
+  {
+    sim.addPars(parsD);
+    sim.addUserPoint(p5);
+    sim.evolve();
+    auto result = sim.result();
+    CHECK(result[40].x == doctest::Approx(0.16).epsilon(0.05));
+    CHECK(result[40].y == doctest::Approx(297.52).epsilon(0.05));
+    CHECK(result[40].H == doctest::Approx(112.54).epsilon(0.05));
+  }
+
+  SUBCASE("check 40th step values in case D6")
+  {
+    sim.addPars(parsD);
+    sim.addUserPoint(p6);
+    sim.evolve();
+    auto result = sim.result();
+    CHECK(result[40].x
+          == doctest::Approx(3.32).epsilon(
+              0.25)); // note: test would fail with stricter approximation
+    CHECK(result[40].y == doctest::Approx(279.29).epsilon(0.05));
+    CHECK(result[40].H == doctest::Approx(104.13).epsilon(0.05));
   }
 }
