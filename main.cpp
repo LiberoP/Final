@@ -37,12 +37,12 @@ int main()
 
     size_t N = static_cast<size_t>(input_N);
 
-    sim.addPars({A, B, C, D, N, delta_t});
+    sim.addParameters({A, B, C, D, N, delta_t});
     sim.addUserPoint({x0, y0});
     sim.evolve();
 
-    fn::Pars pars = {A, B, C, D, N, delta_t};
-    auto res      = sim.result();
+    fn::Parameters pars = {A, B, C, D, N, delta_t};
+    auto res            = sim.result();
 
     std::ofstream outfile{"Results.txt"};
 

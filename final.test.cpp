@@ -7,15 +7,15 @@
 TEST_CASE("Testing Simulation")
 {
   fn::Simulation sim;
-  fn::Pars parsA{1., 3., 2., 5., 10, 0.001}; // A, B, C, D, N, delta-t
-  fn::Pars parsB{2.18, 3.14, 4.17, 6.73, 100, 0.0001};
-  fn::Pars parsC{1.2, 0.5, 0.1,
-                 0.5, 100, 0.001}; // note: more realistic parameters
-  fn::Pars parsD{1.3, 0.4, 0.1, 0.5, 100, 0.001};
+  fn::Parameters parsA{1., 3., 2., 5., 10, 0.001}; // A, B, C, D, N, delta-t
+  fn::Parameters parsB{2.18, 3.14, 4.17, 6.73, 100, 0.0001};
+  fn::Parameters parsC{1.2, 0.5, 0.1,
+                       0.5, 100, 0.001}; // note: more realistic parameters
+  fn::Parameters parsD{1.3, 0.4, 0.1, 0.5, 100, 0.001};
 
-  fn::Pars pars0{1., 3.2, 0, 3., 3, 0.001};
-  fn::Pars pars00{1., 1., 1., 3., 3, 0};
-  fn::Pars parsneg{-1., 3., 2.4, 4., 3, 0.001};
+  fn::Parameters pars0{1., 3.2, 0, 3., 3, 0.001};
+  fn::Parameters pars00{1., 1., 1., 3., 3, 0};
+  fn::Parameters parsneg{-1., 3., 2.4, 4., 3, 0.001};
 
   fn::UserPoint p1{20., 10.}; // x0, y0
   fn::UserPoint p2{10., 20.};
@@ -34,40 +34,40 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("negative parameter")
   {
-    CHECK_THROWS(sim.addPars(parsneg));
+    CHECK_THROWS(sim.addParameters(parsneg));
   }
 
   SUBCASE("null parameter")
   {
-    CHECK_THROWS(sim.addPars(pars0));
+    CHECK_THROWS(sim.addParameters(pars0));
   }
 
   SUBCASE("null steps parameter")
   {
-    CHECK_THROWS(sim.addPars(pars00));
+    CHECK_THROWS(sim.addParameters(pars00));
   }
 
   SUBCASE("no starting point")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     CHECK_THROWS(sim.evolve());
   }
 
   SUBCASE("negative starting point")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     CHECK_THROWS(sim.addUserPoint({2., -1.}));
   }
 
   SUBCASE("null starting point")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     CHECK_THROWS(sim.addUserPoint({0., 1.}));
   }
 
   SUBCASE("final A1")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     sim.addUserPoint(p1);
     sim.evolve();
     auto result = sim.result();
@@ -78,7 +78,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final A2")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     sim.addUserPoint(p2);
     sim.evolve();
     auto result = sim.result();
@@ -89,7 +89,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final A3")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     sim.addUserPoint(p3);
     sim.evolve();
     auto result = sim.result();
@@ -100,7 +100,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 4th step values in case A1")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     sim.addUserPoint(p1);
     sim.evolve();
     auto result = sim.result();
@@ -111,7 +111,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 4th step values in case A2")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     sim.addUserPoint(p2);
     sim.evolve();
     auto result = sim.result();
@@ -122,7 +122,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 4th step values in case A3")
   {
-    sim.addPars(parsA);
+    sim.addParameters(parsA);
     sim.addUserPoint(p3);
     sim.evolve();
     auto result = sim.result();
@@ -133,7 +133,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final B4")
   {
-    sim.addPars(parsB);
+    sim.addParameters(parsB);
     sim.addUserPoint(p4);
     sim.evolve();
     auto result = sim.result();
@@ -144,7 +144,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final B5")
   {
-    sim.addPars(parsB);
+    sim.addParameters(parsB);
     sim.addUserPoint(p5);
     sim.evolve();
     auto result = sim.result();
@@ -155,7 +155,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final B6")
   {
-    sim.addPars(parsB);
+    sim.addParameters(parsB);
     sim.addUserPoint(p6);
     sim.evolve();
     auto result = sim.result();
@@ -166,7 +166,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 20th step values in case B4")
   {
-    sim.addPars(parsB);
+    sim.addParameters(parsB);
     sim.addUserPoint(p4);
     sim.evolve();
     auto result = sim.result();
@@ -177,20 +177,20 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 20th step values in case B5")
   {
-    sim.addPars(parsB);
+    sim.addParameters(parsB);
     sim.addUserPoint(p5);
     sim.evolve();
     auto result = sim.result();
     CHECK(result[20].x
           == doctest::Approx(2.58).epsilon(
-              0.1)); // note:test would fail with stricter approximation
+              0.1)); // note: test would fail with stricter approximation
     CHECK(result[20].y == doctest::Approx(315.35).epsilon(0.05));
     CHECK(result[20].H == doctest::Approx(982.04).epsilon(0.05));
   }
 
   SUBCASE("check 20th step values in case B6")
   {
-    sim.addPars(parsB);
+    sim.addParameters(parsB);
     sim.addUserPoint(p6);
     sim.evolve();
     auto result = sim.result();
@@ -203,7 +203,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final C4")
   {
-    sim.addPars(parsC);
+    sim.addParameters(parsC);
     sim.addUserPoint(p4);
     sim.evolve();
     auto result = sim.result();
@@ -214,7 +214,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final C5")
   {
-    sim.addPars(parsC);
+    sim.addParameters(parsC);
     sim.addUserPoint(p5);
     sim.evolve();
     auto result = sim.result();
@@ -225,7 +225,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final C6")
   {
-    sim.addPars(parsC);
+    sim.addParameters(parsC);
     sim.addUserPoint(p6);
     sim.evolve();
     auto result = sim.result();
@@ -236,7 +236,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 20th step values in case C4")
   {
-    sim.addPars(parsC);
+    sim.addParameters(parsC);
     sim.addUserPoint(p4);
     sim.evolve();
     auto result = sim.result();
@@ -247,7 +247,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 20th step values in case C5")
   {
-    sim.addPars(parsC);
+    sim.addParameters(parsC);
     sim.addUserPoint(p5);
     sim.evolve();
     auto result = sim.result();
@@ -260,7 +260,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 20th step values in case C6")
   {
-    sim.addPars(parsC);
+    sim.addParameters(parsC);
     sim.addUserPoint(p6);
     sim.evolve();
     auto result = sim.result();
@@ -273,7 +273,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final D4")
   {
-    sim.addPars(parsD);
+    sim.addParameters(parsD);
     sim.addUserPoint(p4);
     sim.evolve();
     auto result = sim.result();
@@ -284,7 +284,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final D5")
   {
-    sim.addPars(parsD);
+    sim.addParameters(parsD);
     sim.addUserPoint(p5);
     sim.evolve();
     auto result = sim.result();
@@ -295,7 +295,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("final D6")
   {
-    sim.addPars(parsD);
+    sim.addParameters(parsD);
     sim.addUserPoint(p6);
     sim.evolve();
     auto result = sim.result();
@@ -306,7 +306,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 40th step values in case D4")
   {
-    sim.addPars(parsD);
+    sim.addParameters(parsD);
     sim.addUserPoint(p4);
     sim.evolve();
     auto result = sim.result();
@@ -317,7 +317,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 40th step values in case D5")
   {
-    sim.addPars(parsD);
+    sim.addParameters(parsD);
     sim.addUserPoint(p5);
     sim.evolve();
     auto result = sim.result();
@@ -328,7 +328,7 @@ TEST_CASE("Testing Simulation")
 
   SUBCASE("check 40th step values in case D6")
   {
-    sim.addPars(parsD);
+    sim.addParameters(parsD);
     sim.addUserPoint(p6);
     sim.evolve();
     auto result = sim.result();

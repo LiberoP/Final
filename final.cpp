@@ -10,10 +10,8 @@ size_t Simulation::size() const
   return points_.size();
 }
 
-void Simulation::addPars(const Pars& pars)
+void Simulation::addParameters(Parameters const& pars)
 {
-  parameters_added_ = true;
-
   pars_ = pars;
 
   if ((pars_.A <= 0) || (pars_.B <= 0) || (pars_.C <= 0) || (pars_.D <= 0)) {
@@ -23,33 +21,34 @@ void Simulation::addPars(const Pars& pars)
   else if ((pars_.N < 1) || (pars_.delta_t <= 0)) {
     throw std::runtime_error{"Invalid steps parameter(s)"};
   }
+
+  points_.resize(pars_.N + 1);
 }
 
 void Simulation::addUserPoint(UserPoint const& p0)
 {
   p0_ = p0;
 
-  if (!parameters_added_) {
+  auto const s = size();
+  if (s < 1) {
     throw std::runtime_error{"No parameters added"};
 
   } else if ((p0_.x <= 0) || (p0_.y <= 0)) {
     throw std::runtime_error{"Non-positive coordinate(s) of starting point"};
   }
 
-  points_.resize(pars_.N + 1);
-
   points_[0] = {
       p0_.x * pars_.C / pars_.D, p0_.y * pars_.B / pars_.A,
       -pars_.D * log(p0_.x) + pars_.C * p0_.x + pars_.B * p0_.y
           - pars_.A * log(p0_.y)}; // note: H of initial i=0 point is calculated
-                                  // from the initial (user) coordinates
+                                   // from the initial (user) coordinates
 }
 
 void Simulation::evolve()
 {
   auto const s = size();
 
-  if (s < 1) {
+  if (points_[0].xrel <= 0) {
     throw std::runtime_error{"No point added"};
   }
 
@@ -78,22 +77,21 @@ const std::vector<InternalPoint>& Simulation::points() const
   return points_;
 }
 
-std::vector<Result> Simulation::result() const
+std::vector<OutputPoint> Simulation::result() const
 {
-  std::vector<Result> result_;
+  std::vector<OutputPoint> result;
   auto const s = size();
-  result_.resize(s);
+  result.resize(s);
   for (size_t i = 0; i < s; ++i) {
-    result_[i] = {fabs(points_[i].xrel) * pars_.D / pars_.C,
-                  fabs(points_[i].yrel) * pars_.A / pars_.B,
-                  fabs(points_[i].H)};
+    result[i] = {fabs(points_[i].xrel) * pars_.D / pars_.C,
+                 fabs(points_[i].yrel) * pars_.A / pars_.B, fabs(points_[i].H)};
   }
-  return result_;
+  return result;
 }
 
-std::vector<Result> result(const Simulation& sim)
+std::vector<OutputPoint> simulation(Simulation const& sim)
 {
   return sim.result();
-} // note: to process results outside of class
+}
 
 } // namespace fn

@@ -18,14 +18,14 @@ struct InternalPoint
   double H;
 };
 
-struct Result
+struct OutputPoint
 {
   double x;
   double y;
   double H;
 };
 
-struct Pars
+struct Parameters
 {
   double A;
   double B;
@@ -38,14 +38,13 @@ struct Pars
 class Simulation
 {
   std::vector<InternalPoint> points_;
-  bool parameters_added_ = false;
-  Pars pars_;
+  Parameters pars_;
   UserPoint p0_;
 
  public:
   size_t size() const;
 
-  void addPars(const Pars&);
+  void addParameters(Parameters const&);
 
   void addUserPoint(UserPoint const&);
 
@@ -55,10 +54,10 @@ class Simulation
   points() const; // note: not strictly necessary, but one might want to know
                   // the internal representation vector for later analysis
 
-  std::vector<Result> result() const;
+  std::vector<OutputPoint> result() const;
 };
 
-std::vector<Result> result(std::vector<Result> const& res);
+std::vector<OutputPoint> simulation(Simulation const&);
 
 } // namespace fn
 
